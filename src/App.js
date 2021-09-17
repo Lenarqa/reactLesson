@@ -1,25 +1,47 @@
 import logo from './logo.svg';
-import './App.css';
+import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+
+import MyCardComponent from './Components/MyCard/MyCardComponent';
+import FormComponent from './Components/FormComponents/FormComponent';
+import FirebaceForm from './Components/FirebaseComponent/FirebaceForm';
+import SignInForm from './Components/FormSingIn/SingInForm';
+import getFirebase from './firebaseInit';
+import SignOutForm from './Components/FormSignOut/SingOutForm';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+  let myFirebase = getFirebase();
+  useEffect((firebase)=> {
+    myFirebase.auth().onAuthStateChanged((authUser)=> {
+      if(authUser) {
+        setCurrentUser(authUser.email);
+      }else {
+        setCurrentUser(null);
+      }
+      // console.log(authUser.email);
+    })
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MyApp className="App">
+        {/* <MyCardComponent /> */}
+        {/* <FormComponent /> */}
+        {/* <FirebaceForm /> */}
+        <SignInForm />
+        {/* <SignOutForm /> */}
+    </MyApp>
   );
 }
+
+const MyApp = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1270px;
+    height: 100vh;
+    margin: 0 auto;
+    background-color: blue;
+`
 
 export default App;
